@@ -25,6 +25,7 @@ router.get("", async (req, res) => {
   let new_link = generateLink();
   let link = await Link.findOne({ username: req.user.username }).exec();
   if (link) {
+    if (!req.params.new_link) new_link = link.link;
     await Link.updateOne({ username: req.user.username }, { link: new_link });
     return res
       .status(200)
