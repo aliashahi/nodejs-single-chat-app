@@ -18,7 +18,13 @@ var linkController = require("./link");
 app.use("/link", verifyToken, linkController);
 
 var authController = require("./auth");
-const { insertMessage, askToConnect, approveConnect } = require("./message");
+const {
+  askToConnect,
+  insertMessage,
+  approveConnect,
+  getAllMessages,
+  checkHasConnection,
+} = require("./message");
 app.use("/auth", authController);
 
 app.get("", (_, res) => {
@@ -34,6 +40,8 @@ io.on("connection", (socket) => {
   if (!socket) return;
   if (!allSockets.has(socket.user.username))
     allSockets.set(socket.user.username, socket);
+  checkHasConnection(socket,socket.user.username);
+  getAllMessages(socket.user, socket);
   socket.on(CONSTANTS.EVENT, (data$) => {
     const { type, data } = data$;
     switch (type) {
@@ -57,4 +65,4 @@ http.listen(process.env.API_PORT, process.env.API_HOST, () => {
   console.log(
     `socket is listening on http://${process.env.API_HOST}:${process.env.API_PORT}`
   );
-});
+}).timeout = 2000;

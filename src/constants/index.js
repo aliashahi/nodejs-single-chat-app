@@ -4,6 +4,7 @@ const c = {
   APPROVE: "APPROVE",
   DISAPPROVE: "DISAPPROVE",
   REQUEST: "REQUEST",
+  IN_CHAT: "IN_CHAT",
 };
 
 module.exports = c;
